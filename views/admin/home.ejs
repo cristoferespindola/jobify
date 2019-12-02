@@ -1,15 +1,15 @@
 <%- include('../header') %>
-  <body>
-    <div class="row">
-      <h2 class="title">
-        Admin:
-        <a href="/admin/vagas/new">New Role</a>
-      </h2>
-        <ul>
-            <li><a href="/admin/categorias">Gerenciar categorias</a></li>
-            <li><a href="/admin/vagas">Gerenciar vagas</a></li>
-        </ul>
+
+  <div class="row">
+    <div class="title">
+      <h2 style="display: inline-block;">Admin:</h2> &nbsp;
+      <a href="/admin/vagas/nova">Nova vaga</a> &nbsp;
+      <a href="/" style="font-size: 18px;">Voltar</a>
     </div>
+    <ul>
+      <li><a href="/admin/categorias">Gerenciar categorias</a></li>
+      <li><a href="/admin/vagas">Gerenciar vagas</a></li>
+    </ul>
+  </div>
 
-
-<%- include('../footer') %>
+  <%- include('../footer') %>

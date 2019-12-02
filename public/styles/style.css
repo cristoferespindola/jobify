@@ -37,6 +37,13 @@ footer p {
   text-align: center;
   height: 100px;
   background: #C4C4C4;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+footer p {
+  margin: 0;
 }
 
 .center {
@@ -46,8 +53,7 @@ footer p {
 .title {
   background: #C4C4C4;
   border: 1px solid #000000;
-  padding: 20px;
-  font-size: 24px;
+  padding: 5px;
   line-height: 28px;
 }
 

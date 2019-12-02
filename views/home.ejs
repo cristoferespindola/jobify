@@ -3,7 +3,7 @@
     <div class="row">
       <h2 class="title">Open roles:</h2>
       <% categorias.forEach( categoria => {  %>
-        <h3> <%- categoria.name %> </h3>
+        <h3> <%- categoria.nome %> </h3>
         <ul>
           <% categoria.vagas.forEach( vaga => { %>
             <li><a href="vaga/<%- vaga.id %>"><%- vaga.titulo %></a></li>

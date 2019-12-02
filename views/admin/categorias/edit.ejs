@@ -1,0 +1,14 @@
+<%- include('../../header') %>
+<div class="row">
+  <div class="title">
+    <h2 style="display: inline-block;">Editar categoria:</h2> &nbsp;
+    <a href="/admin/categorias" style="font-size: 18px; ">Voltar</a>
+  </div>
+  <form method="POST">
+    <label for="titulo">Nome:</label>
+    <input type="text" name="nome" id="nome" value="<%- categoria.nome %>">
+
+    <input type="submit" value="Enviar">
+  </form>
+</div>
+<%- include('../../footer') %>

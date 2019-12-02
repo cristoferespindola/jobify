@@ -9,6 +9,14 @@ const bodyParser =  require('body-parser');
 
 const port = process.env.PORT || 3000;
 
+app.use('/admin', (request, response, next) => {
+  if(request.hostname === 'localhost') {
+    next();
+  } else {
+    response.send('Not allowed');
+  }
+});
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views/'));
 app.use(express.static(path.join(__dirname,'public')));
@@ -18,6 +26,7 @@ app.get('/', async(request, response) =>{
   const db = await dbConnection;
   const categoriasDb = await db.all('select * from categorias');
   const vagas = await db.all('select * from vagas');
+  const dev = request.hostname === 'localhost' ? true : false;
   const categorias = categoriasDb.map(cat =>{
     return {
       ...cat,
@@ -25,7 +34,8 @@ app.get('/', async(request, response) =>{
     }
   })
   response.render('home', {
-    categorias
+    categorias,
+    dev
   });
 });
 
@@ -50,13 +60,13 @@ app.get('/admin/vagas', async(request, response) => {
   })
 });
 
-app.get('/admin/vagas/delete/:id', async(request, response) =>{
+app.get('/admin/vagas/deletar/:id', async(request, response) =>{
   const db = await dbConnection;
   await db.run(`DELETE FROM vagas WHERE id = ${request.params.id}`);
   response.redirect('/admin/vagas');
 });
 
-app.get('/admin/vagas/new', async(request, response) =>{
+app.get('/admin/vagas/nova', async(request, response) =>{
   const db = await dbConnection;
   const categorias = await db.all(`SELECT * FROM categorias`);
   response.render('admin/vagas/new', {
@@ -64,7 +74,7 @@ app.get('/admin/vagas/new', async(request, response) =>{
   });
 });
 
-app.get('/admin/vagas/edit/:id', async(request, response) =>{
+app.get('/admin/vagas/editar/:id', async(request, response) =>{
   const db = await dbConnection;
   const vaga = await db.get(`SELECT * FROM vagas WHERE id = ${request.params.id}`)
   const categorias = await db.all(`SELECT * FROM categorias`);
@@ -75,7 +85,7 @@ app.get('/admin/vagas/edit/:id', async(request, response) =>{
   });
 });
 
-app.post('/admin/vagas/new', async(request, response) =>{
+app.post('/admin/vagas/nova', async(request, response) =>{
   const db = await dbConnection;
   const { titulo, descricao, categoria } = request.body;
 
@@ -84,7 +94,7 @@ app.post('/admin/vagas/new', async(request, response) =>{
   response.redirect('/admin/vagas')
 });
 
-app.post('/admin/vagas/edit/:id', async(request, response) =>{
+app.post('/admin/vagas/editar/:id', async(request, response) =>{
   const db = await dbConnection;
   const { titulo, descricao, categoria } = request.body;
   const { id } = request.params;
@@ -100,19 +110,56 @@ app.get('/admin/categorias' , async(request, response) => {
   response.render('admin/categorias/home', {
     categorias
   })
-})
+});
+
+app.get('/admin/categorias/nova', async(request, response) =>{
+  const db = await dbConnection;
+  response.render('admin/categorias/new');
+});
+
+app.post('/admin/categorias/nova', async(request, response) =>{
+  const db = await dbConnection;
+  const { nome } = request.body;
+
+  await db.run(`insert INTO categorias(nome) VALUES('${nome}');`);
+  response.redirect('/admin/categorias')
+});
+
+app.get('/admin/categorias/deletar/:id', async(request, response) =>{
+  const db = await dbConnection;
+  await db.run(`DELETE FROM categorias WHERE id = ${request.params.id}`);
+  response.redirect('/admin/categorias');
+});
+
+app.get('/admin/categorias/editar/:id', async(request, response) =>{
+  const db = await dbConnection;
+  const categoria =  await db.get(`SELECT * FROM categorias WHERE id = ${request.params.id}`);
+
+  response.render('admin/categorias/edit', { categoria });
+});
+
+app.post('/admin/categorias/editar/:id', async(request, response) =>{
+  const db = await dbConnection;
+  const { nome } = request.body;
+  const { id } = request.params;
+
+  await db.run(`UPDATE categorias SET nome = '${nome}'
+                WHERE id = ${id}`);
+  response.redirect('/admin/categorias')
+});
 
 const init = async() => {
   const db = await dbConnection;
   await db.run(`create table if not exists categorias (
     id INTEGER PRIMARY KEY,
-    name TEXT
+    nome TEXT
     )`
   );
   await db.run(`create table if not exists vagas (
     id INTEGER PRIMARY KEY,
     categoria INTEGER,
-    titulo TEXT
+    titulo TEXT,
+    descricao TEXT
     )`
   );
   // await db.run(`ALTER TABLE vagas ADD descricao TEXT`)
