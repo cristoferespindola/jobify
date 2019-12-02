@@ -2,7 +2,7 @@
 
 ## Aprendendo Nodejs
 
-[Link do projeto](https://zeit.co/cristoferespindola/jobify/dwn3tl87h)
+[Link do projeto](https://jobify-f89160wya.now.sh/) *versão atual*
 
 Crud básico para cadastro de vagas, primeiro projeto em *Nodejs*
 
