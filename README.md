@@ -15,9 +15,9 @@ npm start
 Painel administrativo pode ser acessado somente no localhost.
 
 ### Tecnologias usadas:
-Nodejs
-Express
-Zeit - para continuous deployment
+Nodejs  
+Express  
+Zeit - para continuous deployment  
 
 
 Projeto criado no primeiro módulo do curso Devpleno
